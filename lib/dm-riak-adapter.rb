@@ -16,7 +16,11 @@ module DataMapper::Adapters
     end
     
     def read(query)
-      query.filter_records(objects_for(query.model).dup)
+      objects_for(query.model).each do |object|
+        query.fields.each do |property|
+          object[property.name.to_s] = property.typecast(object[property.name.to_s])
+        end
+      end
     end
     
     def update(attributes, collection)
@@ -42,7 +46,7 @@ module DataMapper::Adapters
     
     def create_objects(resources)
       resources.each do |resource|
-        object = bucket(resource.model).new("#{resource.id}")
+        object = bucket(resource.model).new(resource.id.to_s)
         object.data = resource.attributes(:field)
         object.store
       end
@@ -50,7 +54,7 @@ module DataMapper::Adapters
     
     def update_objects(resources)
       resources.each do |resource|
-        object = bucket(resource.model)["#{resource.id}"]
+        object = bucket(resource.model)[resource.id.to_s]
         object.data = resource.attributes(:field)
         object.store
       end
@@ -58,7 +62,7 @@ module DataMapper::Adapters
     
     def delete_objects(resources)
       resources.each do |resource|
-        bucket(resource.model)["#{resource.id}"].delete
+        bucket(resource.model)[resource.id.to_s].delete
       end
     end
   end
