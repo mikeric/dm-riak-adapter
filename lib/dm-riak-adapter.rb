@@ -38,7 +38,7 @@ module DataMapper::Adapters
     
     def create_objects(resources)
       resources.each do |resource|
-        object = @riak[resource.model.storage_name].new("#{resource.id}").store
+        object = @riak[resource.model.storage_name].new("#{resource.id}")
         object.data = resource.attributes(:field)
         object.store
       end
