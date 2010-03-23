@@ -8,51 +8,51 @@ module DataMapper::Adapters
     end
     
     def create(resources)
-      stores = stores_for(resources.first.model)
+      objects = objects_for(resources.first.model)
       
-      resources.each {|r| initialize_serial(r, stores.size.succ)}
-      create_store(resources)
+      resources.each {|r| initialize_serial(r, objects.size.succ)}
+      create_objects(resources)
     end
     
     def read(query)
-      query.filter_records(stores_for(query.model).dup)
+      query.filter_records(objects_for(query.model).dup)
     end
     
     def update(attributes, collection)
       attributes = attributes_as_fields(attributes)
       
-      stores_for(collection.query.model).each {|r| r.update(attributes)}
-      update_store(collection)
+      objects_for(collection.query.model).each {|r| r.update(attributes)}
+      update_objects(collection)
     end
     
     def delete(collection)
-      delete_store(collection)
+      delete_objects(collection)
     end
     
     private
     
-    def stores_for(model)
+    def objects_for(model)
       bucket = @riak[model.storage_name]
       bucket.keys.map {|key| bucket[key].data}
     end
     
-    def create_store(resources)
+    def create_objects(resources)
       resources.each do |resource|
-        robject = @riak[resource.model.storage_name].new("#{resource.id}").store
-        robject.data = resource.attributes(:field)
-        robject.store
+        object = @riak[resource.model.storage_name].new("#{resource.id}").store
+        object.data = resource.attributes(:field)
+        object.store
       end
     end
     
-    def update_store(resources)
+    def update_objects(resources)
       resources.each do |resource|
-        robject = @riak[resource.model.storage_name]["#{resource.id}"]
-        robject.data = resource.attributes(:field)
-        robject.store
+        object = @riak[resource.model.storage_name]["#{resource.id}"]
+        object.data = resource.attributes(:field)
+        object.store
       end
     end
     
-    def delete_store(resources)
+    def delete_objects(resources)
       resources.each do |resource|
         @riak[resource.model.storage_name]["#{resource.id}"].delete
       end
