@@ -4,7 +4,8 @@ module DataMapper::Adapters
   class RiakAdapter < AbstractAdapter
     def initialize(name, options)
       super
-      @riak = Riak::Client.new
+      @riak = Riak::Client.new(:prefix => options[:prefix] || 'riak')
+      @namespace = options[:namespace] ? options[:namespace] + ':' : ''
     end
     
     def create(resources)
@@ -31,14 +32,17 @@ module DataMapper::Adapters
     
     private
     
+    def bucket(model)
+      @riak.bucket(@namespace + model.storage_name)
+    end
+    
     def objects_for(model)
-      bucket = @riak[model.storage_name]
-      bucket.keys.map {|key| bucket[key].data}
+      bucket(model).keys.map {|key| bucket(model)[key].data}
     end
     
     def create_objects(resources)
       resources.each do |resource|
-        object = @riak[resource.model.storage_name].new("#{resource.id}")
+        object = bucket(resource.model).new("#{resource.id}")
         object.data = resource.attributes(:field)
         object.store
       end
@@ -46,7 +50,7 @@ module DataMapper::Adapters
     
     def update_objects(resources)
       resources.each do |resource|
-        object = @riak[resource.model.storage_name]["#{resource.id}"]
+        object = bucket(resource.model)["#{resource.id}"]
         object.data = resource.attributes(:field)
         object.store
       end
@@ -54,7 +58,7 @@ module DataMapper::Adapters
     
     def delete_objects(resources)
       resources.each do |resource|
-        @riak[resource.model.storage_name]["#{resource.id}"].delete
+        bucket(resource.model)["#{resource.id}"].delete
       end
     end
   end
