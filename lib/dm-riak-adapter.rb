@@ -16,7 +16,7 @@ module DataMapper::Adapters
     end
     
     def read(query)
-      objects_for(query.model).each do |object|
+      query.filter_records(objects_for(query.model)).each do |object|
         query.fields.each do |property|
           object[property.name.to_s] = property.typecast(object[property.name.to_s])
         end
