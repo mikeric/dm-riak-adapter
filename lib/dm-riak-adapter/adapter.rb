@@ -7,9 +7,6 @@ module DataMapper::Adapters
     end
     
     def create(resources)
-      objects = objects_for(resources.first.model)
-      
-      resources.each {|r| initialize_serial(r, objects.size.succ)}
       create_objects(resources)
     end
     
@@ -48,7 +45,8 @@ module DataMapper::Adapters
     
     def create_objects(resources)
       resources.each do |resource|
-        object = bucket(resource.model).new(resource.id.to_s)
+        object = bucket(resource.model).new.store
+        initialize_serial(resource, object.key)
         object.data = resource.attributes(:field)
         object.store
       end
@@ -56,7 +54,7 @@ module DataMapper::Adapters
     
     def update_objects(resources)
       resources.each do |resource|
-        object = bucket(resource.model)[resource.id.to_s]
+        object = bucket(resource.model)[resource.key[0]]
         object.data = resource.attributes(:field)
         object.store
       end
@@ -64,7 +62,7 @@ module DataMapper::Adapters
     
     def delete_objects(resources)
       resources.each do |resource|
-        bucket(resource.model)[resource.id.to_s].delete
+        bucket(resource.model)[resource.key[0]].delete
       end
     end
   end
