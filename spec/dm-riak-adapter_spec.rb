@@ -9,7 +9,7 @@ describe DataMapper::Adapters::RiakAdapter do
   end
   
   after :all do
-    Heffalump.all.destroy
+    @adapter.flush Heffalump
   end
 
   it_should_behave_like 'An Adapter'

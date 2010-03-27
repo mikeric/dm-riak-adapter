@@ -34,6 +34,10 @@ module DataMapper::Adapters
       delete_objects(collection)
     end
     
+    def flush(model)
+      bucket(model).keys.each {|key| bucket(model)[key].delete}
+    end
+    
     private
     
     def bucket(model)
