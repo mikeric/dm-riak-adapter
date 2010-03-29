@@ -1,6 +1,6 @@
 module DataMapper
   module Types
-    class Serial < Type
+    class Key < Type
       primitive String
       serial    true
     end
