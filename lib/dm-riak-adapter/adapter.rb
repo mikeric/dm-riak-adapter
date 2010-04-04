@@ -2,7 +2,12 @@ module DataMapper::Adapters
   class RiakAdapter < AbstractAdapter
     def initialize(name, options)
       super
-      @riak = Riak::Client.new(:prefix => options[:prefix] || 'riak')
+      
+      @riak = Riak::Client.new(
+        :host   => options[:host],
+        :port   => options[:port],
+        :prefix => options[:prefix]
+      )
       @namespace = options[:namespace] ? options[:namespace] + ':' : ''
     end
     
