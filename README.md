@@ -12,16 +12,16 @@ Install the **dm-riak-adapter** gem:
 
       gem install dm-riak-adapter
 
-## Usage
+## Synopsis
 
-Require **dm-core** and **dm-riak-adapter**. Tell DataMapper to use the Riak adapter and set a namespace for your app. This namespace will prefix each bucket like `myapp:projects` `myapp:tasks`. You can also skip setting a namespace and the buckets wont have any prefix.
+Require **dm-core** and **dm-riak-adapter**. Tell DataMapper to use the Riak adapter and set a namespace for your app. This namespace will prefix each bucket like `myapp:projects` `myapp:tasks`. Skip setting a namespace and the buckets will have no prefix.
 
       require 'dm-core'
       require 'dm-riak-adapter'
       
       DataMapper.setup :default, :adapter => 'riak', :namespace => 'myapp'
       
-Continue defining your models and properties as you normally would. Set the serial number as type **Key** to use Riak's server-assigned UUIDs.
+Continue defining your models and properties as you normally would. Set a property as type `Key` to use Riak's server-assigned UUIDs.
       
       class Project
         include DataMapper::Resource
