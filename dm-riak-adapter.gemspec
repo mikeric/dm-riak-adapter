@@ -2,12 +2,12 @@
 
 Gem::Specification.new do |s|
   s.name = %q{dm-riak-adapter}
-  s.version = "0.0.3"
+  s.version = "0.0.4"
   
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Mike Richards"]
-  s.date = %q{2010-03-29}
-  s.description = %q{DataMapper adapter for Riak}
+  s.date = %q{2010-04-06}
+  s.description = %q{DataMapper Adapter for Riak}
   s.email = %q{mike22e@gmail.com}
   s.files = [
     "README.md",
@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/mikeric/dm-riak-adapter}
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.5}
-  s.summary = %q{DataMapper adapter for Riak}
+  s.summary = %q{DataMapper Adapter for Riak}
   s.test_files = [
     "spec/dm-riak-adapter_spec.rb",
     "spec/spec_helper.rb"

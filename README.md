@@ -20,9 +20,9 @@ Require **dm-core** and **dm-riak-adapter**. Tell DataMapper to use the Riak ada
       require 'dm-riak-adapter'
       
       DataMapper.setup :default, :adapter => 'riak', :namespace => 'myapp'
-      
+
 Continue defining your models and properties as you normally would. Set a property as type `Key` to use Riak's server-assigned UUIDs.
-      
+
       class Project
         include DataMapper::Resource
         
@@ -40,3 +40,9 @@ Continue defining your models and properties as you normally would. Set a proper
         
         belongs_to :project
       end
+
+## Resources
+
+- [Documentation](http://yardoc.org/docs/mikeric-dm-riak-adapter/DataMapper/Adapters/RiakAdapter)
+- [Metrics](http://getcaliper.com/caliper/project?repo=http://rubygems.org/gems/dm-riak-adapter)
+- [Gems](http://rubygems.org/gems/dm-riak-adapter)
