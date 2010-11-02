@@ -1,3 +1,4 @@
+require 'pp'
 module DataMapper::Adapters
   class RiakAdapter < AbstractAdapter
     # Initializes a new RiakAdapter instance
@@ -115,8 +116,12 @@ module DataMapper::Adapters
     
     def create_objects(resources)
       resources.each do |resource|
-        object = bucket(resource.model).new.store
+        object = bucket(resource.model).new
+        object.data = ""
+        object.store
+        object.instance_variable_set("@_key", object.key)
         initialize_serial(resource, object.key)
+        object.instance_variable_set("@_key", object.key)
         object.data = resource.attributes(:field)
         object.store
       end
@@ -126,6 +131,7 @@ module DataMapper::Adapters
       resources.each do |resource|
         object = bucket(resource.model)[resource.key[0]]
         object.data = resource.attributes(:field)
+        object.instance_variable_set("@_key", object.key)
         object.store
       end
     end
