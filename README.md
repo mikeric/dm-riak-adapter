@@ -26,7 +26,7 @@ Continue defining your models and properties as you normally would. Set a proper
       class Project
         include DataMapper::Resource
         
-        property :id,   Key
+        property :id,   Serial
         property :name, String
         
         has n, :tasks
@@ -35,7 +35,7 @@ Continue defining your models and properties as you normally would. Set a proper
       class Task
         include DataMapper::Resource
         
-        property :id,       Key
+        property :id,       Serial
         property :summary,  String
         
         belongs_to :project

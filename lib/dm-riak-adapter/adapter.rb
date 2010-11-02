@@ -35,7 +35,11 @@ module DataMapper::Adapters
     # @return [Integer]
     #   Number of objects created
     def create(resources)
-      create_objects(resources)
+    	    objects = create_objects(resources)
+    	    objects.each do |o|
+    	    	    o.instance_variable_set("@_key", o.key)
+    	    end
+    	    return objects
     end
     
     # Reads one or many resources from a datastore
@@ -71,7 +75,6 @@ module DataMapper::Adapters
     #   Number of records updated
     def update(attributes, collection)
       attributes = attributes_as_fields(attributes)
-      
       objects_for(collection.query.model).each {|r| r.update(attributes)}
       update_objects(collection)
     end
@@ -119,9 +122,7 @@ module DataMapper::Adapters
         object = bucket(resource.model).new
         object.data = ""
         object.store
-        object.instance_variable_set("@_key", object.key)
         initialize_serial(resource, object.key)
-        object.instance_variable_set("@_key", object.key)
         object.data = resource.attributes(:field)
         object.store
       end
@@ -130,8 +131,8 @@ module DataMapper::Adapters
     def update_objects(resources)
       resources.each do |resource|
         object = bucket(resource.model)[resource.key[0]]
+        object.instance_variable_set("@_key", resource.key[0])
         object.data = resource.attributes(:field)
-        object.instance_variable_set("@_key", object.key)
         object.store
       end
     end
