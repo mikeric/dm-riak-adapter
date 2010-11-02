@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe DataMapper::Adapters::RiakAdapter do
   before :all do
-    @adapter = DataMapper.setup(:default, :adapter => 'riak', :namespace => 'test', :host => '192.168.1.44')
+    @adapter = DataMapper.setup(:default, :adapter => 'riak', :namespace => 'test', :host => ENV['RIAK_HOST'] || '127.0.0.1')
     
     class ::Heffalump
       include DataMapper::Resource
