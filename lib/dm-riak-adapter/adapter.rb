@@ -1,4 +1,3 @@
-require 'pp'
 module DataMapper::Adapters
   class RiakAdapter < AbstractAdapter
     # Initializes a new RiakAdapter instance
@@ -35,11 +34,9 @@ module DataMapper::Adapters
     # @return [Integer]
     #   Number of objects created
     def create(resources)
-    	    objects = create_objects(resources)
-    	    objects.each do |o|
-    	    	    o.instance_variable_set("@_key", o.key)
-    	    end
-    	    return objects
+      create_objects(resources).each do |object|
+        object.instance_variable_set :@_key, object.key
+      end
     end
     
     # Reads one or many resources from a datastore
@@ -76,7 +73,7 @@ module DataMapper::Adapters
     def update(attributes, collection)
       attributes = attributes_as_fields(attributes)
       objects_for(collection.query.model).each {|r| r.update(attributes)}
-      update_objects(collection)
+      update_objects collection
     end
     
     # Deletes one or many existing resources
@@ -90,7 +87,7 @@ module DataMapper::Adapters
     # @return [Integer]
     #   Number of records deleted
     def delete(collection)
-      delete_objects(collection)
+      delete_objects collection
     end
     
     # Flushes the bucket for the specified model
@@ -110,7 +107,7 @@ module DataMapper::Adapters
     private
     
     def bucket(model)
-      @riak.bucket(@namespace + model.storage_name)
+      @riak.bucket @namespace + model.storage_name
     end
     
     def objects_for(model)
@@ -121,8 +118,7 @@ module DataMapper::Adapters
       resources.each do |resource|
         object = bucket(resource.model).new
         object.data = ""
-        object.store
-        initialize_serial(resource, object.key)
+        initialize_serial resource, object.store.key
         object.data = resource.attributes(:field)
         object.store
       end
@@ -131,7 +127,7 @@ module DataMapper::Adapters
     def update_objects(resources)
       resources.each do |resource|
         object = bucket(resource.model)[resource.key[0]]
-        object.instance_variable_set("@_key", resource.key[0])
+        object.instance_variable_set :@_key, resource.key[0]
         object.data = resource.attributes(:field)
         object.store
       end
@@ -144,5 +140,5 @@ module DataMapper::Adapters
     end
   end
   
-  const_added(:RiakAdapter)
+  const_added :RiakAdapter
 end

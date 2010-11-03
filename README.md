@@ -21,7 +21,7 @@ Require **dm-core** and **dm-riak-adapter**. Tell DataMapper to use the Riak ada
       
       DataMapper.setup :default, :adapter => 'riak', :namespace => 'myapp'
 
-Continue defining your models and properties as you normally would. Set a property as type `Key` to use Riak's server-assigned UUIDs.
+Continue defining your models and properties as you normally would. Set a property as type `Serial` to use Riak's server-assigned UUIDs.
 
       class Project
         include DataMapper::Resource
