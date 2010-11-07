@@ -34,7 +34,7 @@ module DataMapper::Adapters
     # @return [Integer]
     #   Number of objects created
     def create(resources)
-      create_objects(resources)
+      create_objects resources
     end
     
     # Reads one or many resources from a datastore
@@ -70,9 +70,9 @@ module DataMapper::Adapters
     #   Number of records updated
     def update(attributes, collection)
       attributes = attributes_as_fields(attributes)
-      
       objects_for(collection.query.model).each {|r| r.update(attributes)}
-      update_objects(collection)
+      
+      update_objects collection
     end
     
     # Deletes one or many existing resources
@@ -86,7 +86,7 @@ module DataMapper::Adapters
     # @return [Integer]
     #   Number of records deleted
     def delete(collection)
-      delete_objects(collection)
+      delete_objects collection
     end
     
     # Flushes the bucket for the specified model
@@ -106,7 +106,7 @@ module DataMapper::Adapters
     private
     
     def bucket(model)
-      @riak.bucket(@namespace + model.storage_name)
+      @riak.bucket @namespace + model.storage_name
     end
     
     def objects_for(model)
@@ -115,8 +115,9 @@ module DataMapper::Adapters
     
     def create_objects(resources)
       resources.each do |resource|
-        object = bucket(resource.model).new.store
-        initialize_serial(resource, object.key)
+        object = bucket(resource.model).new
+        object.data = {}
+        initialize_serial resource, object.store.key
         object.data = resource.attributes(:field)
         object.store
       end
@@ -137,5 +138,5 @@ module DataMapper::Adapters
     end
   end
   
-  const_added(:RiakAdapter)
+  const_added :RiakAdapter
 end

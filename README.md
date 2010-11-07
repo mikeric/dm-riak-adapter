@@ -14,12 +14,12 @@ Install the **dm-riak-adapter** gem:
 
 ## Synopsis
 
-Require **dm-core** and **dm-riak-adapter**. Tell DataMapper to use the Riak adapter and set a namespace for your app. This namespace will prefix each bucket like `myapp:projects` `myapp:tasks`. Skip setting a namespace and the buckets will have no prefix.
+Require **dm-core** and **dm-riak-adapter**. Tell DataMapper to use the Riak adapter and set a namespace for your app. This namespace will prefix each bucket like `todo:projects` `todo:tasks`. Skip setting a namespace and the buckets will have no prefix.
 
       require 'dm-core'
       require 'dm-riak-adapter'
       
-      DataMapper.setup :default, :adapter => 'riak', :namespace => 'myapp'
+      DataMapper.setup :default, :adapter => 'riak', :namespace => 'todo'
 
 Continue defining your models and properties as you normally would. Set a property as type `Key` to use Riak's server-assigned UUIDs.
 
@@ -43,6 +43,6 @@ Continue defining your models and properties as you normally would. Set a proper
 
 ## Resources
 
-- [Documentation](http://yardoc.org/docs/mikeric-dm-riak-adapter/DataMapper/Adapters/RiakAdapter)
-- [Metrics](http://getcaliper.com/caliper/project?repo=http://rubygems.org/gems/dm-riak-adapter)
-- [Gems](http://rubygems.org/gems/dm-riak-adapter)
+- [GitHub](http://github.com/mikeric/dm-riak-adapter)
+- [RubyDoc](http://rubydoc.info/github/mikeric/dm-riak-adapter/master/frames)
+- [RubyGems](http://rubygems.org/gems/dm-riak-adapter)
