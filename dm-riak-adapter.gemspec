@@ -2,9 +2,9 @@
 
 Gem::Specification.new do |s|
   s.name        = "dm-riak-adapter"
-  s.version     = "0.0.5"
+  s.version     = "0.1.0"
   s.authors     = ["Mike Richards"]
-  s.date        = "2010-11-07"
+  s.date        = "2010-11-21"
   s.description = "DataMapper adapter for Riak"
   s.summary     = "DataMapper adapter for Riak"
   s.homepage    = "http://github.com/mikeric/dm-riak-adapter"
