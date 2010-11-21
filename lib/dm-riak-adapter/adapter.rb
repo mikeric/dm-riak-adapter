@@ -105,12 +105,18 @@ module DataMapper::Adapters
     
     private
     
+    def bucket_name(model)
+      @namespace + model.storage_name
+    end
+    
     def bucket(model)
-      @riak.bucket @namespace + model.storage_name
+      @riak.bucket bucket_name(model)
     end
     
     def objects_for(model)
-      bucket(model).keys.map {|key| bucket(model)[key].data}
+      Riak::MapReduce.new(@riak).
+        add(bucket_name(model)).
+        map('Riak.mapValuesJson', :keep => true).run
     end
     
     def create_objects(resources)
